@@ -44,6 +44,14 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
         // this.queue_draw ();
     }
 
+    public void update_show_details (bool details = false) {
+
+    }
+
+    public void update_sort_by (Gtk4Demo.SortBy param) {
+
+    }
+
     protected override void dispose () {
         sw.unparent ();
         base.dispose ();
@@ -61,4 +69,17 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
         var pic = list_item.get_child () as Gtk.Picture;
         pic.set_paintable (color_item);
     }
+}
+
+public enum Gtk4Demo.SortBy {
+    UNSORTED,
+    NAME,
+    RED,
+    GREEN,
+    BLUE,
+    RGB,
+    HUE,
+    SATURAION,
+    VALUE,
+    HSV
 }
