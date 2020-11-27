@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="/gtk4_list_colors">
+        <file>data/color.names.txt</file>
+        <file>styles/listview_colors.css</file>
+    </gresource>
+</gresources>
