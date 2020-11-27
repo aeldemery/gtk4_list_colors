@@ -66,25 +66,23 @@ public class Gtk4Demo.ColorWidget : GLib.Object, Gdk.Paintable {
         return 32;
     }
 
-    public static void rgb_to_hsv (Gdk.RGBA rgba, out double h_out, out double s_out, out double v_out) {
+    public void rgb_to_hsv (Gdk.RGBA rgba, out double h_out, out double s_out, out double v_out) {
         Gtk.rgb_to_hsv (rgba.red, rgba.green, rgba.blue, out h_out, out s_out, out v_out);
     }
 
-    public static string ? get_rgb_markup (ColorWidget ? color) {
-        if (color == null) return null;
+    public string get_rgb_markup () {
         return "<b>R:</b> %d <b>G:</b> %d <b>B:</b> %d".printf (
-            (int) (color.red * 255),
-            (int) (color.green * 255),
-            (int) (color.blue * 255)
+            (int) (this.red * 255),
+            (int) (this.green * 255),
+            (int) (this.blue * 255)
         );
     }
 
-    public static string ? get_hsv_markup (ColorWidget ? color) {
-        if (color == null) return null;
+    public string get_hsv_markup () {
         return "<b>H:</b> %d <b>S:</b> %d <b>V:</b> %d".printf (
-            color.hue,
-            color.saturation,
-            color.value
+            this.hue,
+            this.saturation,
+            this.value
         );
     }
 }
