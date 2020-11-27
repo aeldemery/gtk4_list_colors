@@ -19,4 +19,4 @@ gtk4 3.99.4
 
 ## Screenshot <a name = "screenshot"></a>
 
-![Screenshot](aeldemery/gtk4_color_list)
+![Screenshot](https://github.com/aeldemery/gtk4_list_colors/blob/master/Screenshot1.png)
