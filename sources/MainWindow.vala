@@ -13,15 +13,23 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
         toggle_info.icon_name = "emblem-important-symbolic";
 
         var refill_button = new Gtk.Button.with_label ("refill");
-        var laber = new Gtk.Label ("Color Num:");
+        var label = new Gtk.Label ("Color Num:");
         var number_dropdown = new Gtk.DropDown.from_strings (
             { "8", "64", "512", "4096", "32768", "262144", "2097152", "16777216" });
         number_dropdown.notify["selected"].connect (number_dropdown_item_selected);
 
         header.pack_start (toggle_info);
         header.pack_start (refill_button);
-        header.pack_start (laber);
+        header.pack_start (label);
         header.pack_start (number_dropdown);
+
+        label = new Gtk.Label ("Show:");
+        var details_dropdown = new Gtk.DropDown.from_strings ({ "Colors", "Everything" });
+        details_dropdown.notify["selected"].connect (details_dropdown_item_selected);
+
+        header.pack_end (details_dropdown);
+        header.pack_end (label);
+
 
         this.set_titlebar (header);
 
@@ -35,6 +43,18 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
         var item = (Gtk.StringObject)dropdown.get_selected_item ();
         var i = int.parse (item.string);
         color_grid_widget.update_list_size (i);
+    }
+
+    void details_dropdown_item_selected (GLib.Object object, GLib.ParamSpec psepc) {
+        var dropdown = (Gtk.DropDown)object;
+        var item = (Gtk.StringObject)dropdown.get_selected_item ();
         
+        if (item.string == "Colors") {
+            color_grid_widget.update_show_details (false);
+        } else if (item.string == "Everything") {
+            color_grid_widget.update_show_details (true);
+        } else {
+            assert_not_reached ();
+        }
     }
 }
