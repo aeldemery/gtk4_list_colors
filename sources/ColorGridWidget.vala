@@ -4,6 +4,7 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
     private ColorListModel color_model;
     private Gtk.SelectionModel selection_model;
     private Gtk.SignalListItemFactory color_factory;
+    private Gtk.MultiSorter multi_sorter;
 
     static construct {
         set_layout_manager_type (typeof (Gtk.BinLayout));
@@ -15,8 +16,9 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
         Gtk.StyleContext.add_provider_for_display (
             Gdk.Display.get_default (), provider,
             Gtk.STYLE_PROVIDER_PRIORITY_USER);
-
-        color_model = new ColorListModel (16777216);
+        
+        /* create model with the default color numbers */
+        color_model = new ColorListModel (4096);
         selection_model = new Gtk.SingleSelection (color_model);
 
         color_factory = new Gtk.SignalListItemFactory ();
