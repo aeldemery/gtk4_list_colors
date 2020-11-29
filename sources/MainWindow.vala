@@ -27,6 +27,25 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
         header.pack_start (label);
         header.pack_start (number_dropdown);
 
+        label = new Gtk.Label ("Sort By:");
+        var sort_by_dropdown = new Gtk.DropDown.from_strings (
+        {
+            "Unsorted",
+            "Name",
+            "Red",
+            "Green",
+            "Blue",
+            "RGB",
+            "Hue",
+            "Saturation",
+            "Value",
+            "HSV",
+        });
+        sort_by_dropdown.notify["selected"].connect (sort_by_dropdown_item_selected);
+
+        header.pack_end (sort_by_dropdown);
+        header.pack_end (label);
+
         label = new Gtk.Label ("Show:");
         var details_dropdown = new Gtk.DropDown.from_strings ({ "Colors", "Everything" });
         details_dropdown.notify["selected"].connect (details_dropdown_item_selected);
