@@ -68,37 +68,43 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
 
         expression = new Gtk.PropertyExpression (typeof (ColorWidget), null, "red");
         red_sorter = new Gtk.NumericSorter (expression);
+        red_sorter.sort_order = Gtk.SortType.DESCENDING;
         rgb_sorter.append (red_sorter);
 
         expression = new Gtk.PropertyExpression (typeof (ColorWidget), null, "green");
         green_sorter = new Gtk.NumericSorter (expression);
+        green_sorter.sort_order = Gtk.SortType.DESCENDING;
         rgb_sorter.append (green_sorter);
 
         expression = new Gtk.PropertyExpression (typeof (ColorWidget), null, "blue");
         blue_sorter = new Gtk.NumericSorter (expression);
+        blue_sorter.sort_order = Gtk.SortType.DESCENDING;
         rgb_sorter.append (blue_sorter);
 
         hsv_sorter = new Gtk.MultiSorter ();
 
         expression = new Gtk.PropertyExpression (typeof (ColorWidget), null, "hue");
         hue_sorter = new Gtk.NumericSorter (expression);
+        hue_sorter.sort_order = Gtk.SortType.DESCENDING;
         hsv_sorter.append (hue_sorter);
 
         expression = new Gtk.PropertyExpression (typeof (ColorWidget), null, "saturation");
         saturation_sorter = new Gtk.NumericSorter (expression);
+        saturation_sorter.sort_order = Gtk.SortType.DESCENDING;
         hsv_sorter.append (saturation_sorter);
 
         expression = new Gtk.PropertyExpression (typeof (ColorWidget), null, "value");
         value_sorter = new Gtk.NumericSorter (expression);
+        value_sorter.sort_order = Gtk.SortType.DESCENDING;
         hsv_sorter.append (value_sorter);
 
-        sort_list_model = new Gtk.SortListModel (color_model, unsorted);
+        sort_list_model = new Gtk.SortListModel (color_model, name_sorter);
         sort_list_model.incremental = true;
         selection_model = new Gtk.MultiSelection (sort_list_model);
 
         grid_view = new Gtk.GridView (selection_model, simple_color_factory);
         grid_view.enable_rubberband = true;
-        grid_view.max_columns = 24;
+        grid_view.max_columns = 20;
         grid_view.hscroll_policy = grid_view.vscroll_policy = Gtk.ScrollablePolicy.NATURAL;
 
         sw.set_child (grid_view);
@@ -116,7 +122,7 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
 
     public void update_show_details (bool details = false) {
         if (details == false) {
-            grid_view.max_columns = 24;
+            grid_view.max_columns = 20;
             grid_view.factory = simple_color_factory;
         } else {
             grid_view.max_columns = 6;
