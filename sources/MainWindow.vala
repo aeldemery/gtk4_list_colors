@@ -16,7 +16,9 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
         var refill_button = new Gtk.Button.with_label ("refill");
         var label = new Gtk.Label ("Color Num:");
         var number_dropdown = new Gtk.DropDown.from_strings (
+        {
             "8", "64", "512", "4096", "32768", "262144", "2097152", "16777216",
+        });
         number_dropdown.notify["selected"].connect (number_dropdown_item_selected);
 
         header.pack_start (toggle_info);
