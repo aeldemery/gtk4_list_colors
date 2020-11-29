@@ -53,8 +53,10 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
 
     public void update_show_details (bool details = false) {
         if (details == false) {
+            grid_view.max_columns = 24;
             grid_view.factory = simple_color_factory;
         } else {
+            grid_view.max_columns = 6;
             grid_view.factory = detailed_color_factory;
         }
     }
