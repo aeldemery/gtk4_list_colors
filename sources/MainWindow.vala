@@ -19,6 +19,7 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
         {
             "8", "64", "512", "4096", "32768", "262144", "2097152", "16777216",
         });
+        number_dropdown.set_selected (3); /* 4096 */
         number_dropdown.notify["selected"].connect (number_dropdown_item_selected);
 
         header.pack_start (toggle_info);
