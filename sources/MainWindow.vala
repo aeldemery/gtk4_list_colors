@@ -80,4 +80,34 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
             assert_not_reached ();
         }
     }
+
+    void sort_by_dropdown_item_selected (GLib.Object object, GLib.ParamSpec pspec) {
+        var dropdown = (Gtk.DropDown)object;
+        var item = (Gtk.StringObject)dropdown.get_selected_item ();
+
+        switch (item.string) {
+            case "Unsorted":
+                color_grid_widget.update_sort_by (SortBy.UNSORTED); break;
+            case "Name":
+                color_grid_widget.update_sort_by (SortBy.NAME); break;
+            case    "Red":
+                color_grid_widget.update_sort_by (SortBy.RED); break;
+            case    "Green":
+                color_grid_widget.update_sort_by (SortBy.GREEN); break;
+            case    "Blue":
+                color_grid_widget.update_sort_by (SortBy.BLUE); break;
+            case    "RGB":
+                color_grid_widget.update_sort_by (SortBy.RGB); break;
+            case    "Hue":
+                color_grid_widget.update_sort_by (SortBy.HUE); break;
+            case    "Saturation":
+                color_grid_widget.update_sort_by (SortBy.SATURAION); break;
+            case    "Value":
+                color_grid_widget.update_sort_by (SortBy.VALUE); break;
+            case    "HSV":
+                color_grid_widget.update_sort_by (SortBy.HSV); break;
+            default:
+                assert_not_reached ();
+        }
+    }
 }
