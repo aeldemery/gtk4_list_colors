@@ -8,6 +8,7 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
         this.title = "Vala Colors";
 
         header = new Gtk.HeaderBar ();
+        header.decoration_layout = ":close";
 
         var toggle_info = new Gtk.ToggleButton ();
         toggle_info.icon_name = "emblem-important-symbolic";
