@@ -98,12 +98,17 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
         value_sorter.sort_order = Gtk.SortType.DESCENDING;
         hsv_sorter.append (value_sorter);
 
+        /* create a SortListModel and initialize it with the model and default sorting, i.e name_sorter */
         sort_list_model = new Gtk.SortListModel (color_model, name_sorter);
+        /* without incremental sorting the UI will hangs for a long time if you sort 16 Million items */
         sort_list_model.incremental = true;
+
+        /* Wrap the sort models in a selection models to pass it the GridView initializer */
         selection_model = new Gtk.MultiSelection (sort_list_model);
 
         grid_view = new Gtk.GridView (selection_model, simple_color_factory);
         grid_view.enable_rubberband = true;
+        /* max columns has a performance penalty, so choose this according to the planed size of the list item */
         grid_view.max_columns = 20;
         grid_view.hscroll_policy = grid_view.vscroll_policy = Gtk.ScrollablePolicy.NATURAL;
 
@@ -116,10 +121,9 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
     /** Update the underling color listmodel size */
     public void update_list_size (uint new_size) {
         color_model.size = new_size;
-        // grid_view.queue_draw ();
-        // this.queue_draw ();
     }
 
+    /** Update color grid to either show or hide the details  */
     public void update_show_details (bool details = false) {
         if (details == false) {
             grid_view.max_columns = 20;
@@ -130,6 +134,7 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
         }
     }
 
+    /** Update the sorting mechanism */
     public void update_sort_by (Gtk4Demo.SortBy sortby) {
         switch (sortby) {
             case SortBy.UNSORTED:
@@ -174,14 +179,12 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
 
     void setup_simple_color_factory (Gtk.SignalListItemFactory factory, Gtk.ListItem list_item) {
         var pic = new Gtk.Picture ();
-        // pic.set_size_request (32, 32);
-
         list_item.set_child (pic);
     }
 
     void bind_simple_color_factory (Gtk.SignalListItemFactory factory, Gtk.ListItem list_item) {
-        var color_item = list_item.get_item () as ColorWidget;
-        var pic = list_item.get_child () as Gtk.Picture;
+        var color_item = (ColorWidget)list_item.get_item ();
+        var pic = (Gtk.Picture)list_item.get_child ();
         pic.set_paintable (color_item);
     }
 
@@ -189,11 +192,14 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
         var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
 
         var pic = new Gtk.Picture ();
+
         var name_label = new Gtk.Label (null);
         name_label.ellipsize = Pango.EllipsizeMode.END;
         name_label.max_width_chars = 12;
+
         var rgb_label = new Gtk.Label (null);
         rgb_label.use_markup = true;
+        
         var hsv_label = new Gtk.Label (null);
         hsv_label.use_markup = true;
 
