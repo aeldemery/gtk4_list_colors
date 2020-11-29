@@ -4,7 +4,7 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
     public MainWindow (Gtk.Application app) {
         Object (application: app);
 
-        this.set_default_size (800, 600);
+        this.set_default_size (960, 680);
         this.title = "Vala Colors";
 
         header = new Gtk.HeaderBar ();
@@ -19,7 +19,13 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
         {
             "8", "64", "512", "4096", "32768", "262144", "2097152", "16777216",
         });
+
+        var format_factory = new Gtk.SignalListItemFactory ();
+        format_factory.setup.connect (setup_format_factory);
+        format_factory.bind.connect (bind_format_factory);
+
         number_dropdown.set_selected (3); /* 4096 */
+        number_dropdown.factory = format_factory;
         number_dropdown.notify["selected"].connect (number_dropdown_item_selected);
 
         header.pack_start (toggle_info);
@@ -41,6 +47,7 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
             "Value",
             "HSV",
         });
+        sort_by_dropdown.selected = 1; /* Name */
         sort_by_dropdown.notify["selected"].connect (sort_by_dropdown_item_selected);
 
         header.pack_end (sort_by_dropdown);
@@ -70,7 +77,7 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
     void details_dropdown_item_selected (GLib.Object object, GLib.ParamSpec psepc) {
         var dropdown = (Gtk.DropDown)object;
         var item = (Gtk.StringObject)dropdown.get_selected_item ();
-        
+
         if (item.string == "Colors") {
             color_grid_widget.update_show_details (false);
         } else if (item.string == "Everything") {
@@ -108,5 +115,26 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
             default:
                 assert_not_reached ();
         }
+    }
+
+    void setup_format_factory (Gtk.SignalListItemFactory factory, Gtk.ListItem list_item) {
+        var attrs = new Pango.AttrList ();
+        attrs.insert (new Pango.AttrFontFeatures ("tnum"));
+
+        var label = new Gtk.Label ("");
+        label.xalign = 1;
+        label.attributes = attrs;
+
+        list_item.child = label;
+    }
+
+    void bind_format_factory (Gtk.SignalListItemFactory factory, Gtk.ListItem list_item) {
+        var label = (Gtk.Label)list_item.child;
+        var item = (Gtk.StringObject) list_item.item;
+
+        var num = int.parse (item.string);
+        var str = "%'u".printf (num);
+
+        label.label = str;
     }
 }
