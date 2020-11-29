@@ -1,10 +1,29 @@
 public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
     private Gtk.GridView grid_view;
     private Gtk.ScrolledWindow sw;
+
     private ColorListModel color_model;
+
     private Gtk.SelectionModel selection_model;
+
     private Gtk.SignalListItemFactory simple_color_factory;
     private Gtk.SignalListItemFactory detailed_color_factory;
+
+    private Gtk.StringSorter name_sorter;
+    private Gtk.NumericSorter red_sorter;
+    private Gtk.NumericSorter green_sorter;
+    private Gtk.NumericSorter blue_sorter;
+    private Gtk.NumericSorter hue_sorter;
+    private Gtk.NumericSorter saturation_sorter;
+    private Gtk.NumericSorter value_sorter;
+
+    private Gtk.SortListModel sort_list_model;
+
+    private Gtk.MultiSorter rgb_sorter;
+    private Gtk.MultiSorter hsv_sorter;
+    private Gtk.MultiSorter unsorted;
+
+    private Gtk.Expression expression;
 
     static construct {
         set_layout_manager_type (typeof (Gtk.BinLayout));
@@ -19,18 +38,63 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
 
         /* create model with the default color numbers */
         color_model = new ColorListModel (4096);
-        selection_model = new Gtk.MultiSelection (color_model);
 
+        /* list item factory with simple color grid */
         simple_color_factory = new Gtk.SignalListItemFactory ();
         simple_color_factory.setup.connect (setup_simple_color_factory);
         simple_color_factory.bind.connect (bind_simple_color_factory);
 
+        /* list item factory with detailed grid, i.e color name and values */
         detailed_color_factory = new Gtk.SignalListItemFactory ();
         detailed_color_factory.setup.connect (setup_detailed_color_factory);
         detailed_color_factory.bind.connect (bind_detailed_color_factory);
 
         sw = new Gtk.ScrolledWindow ();
         sw.hscrollbar_policy = Gtk.PolicyType.NEVER;
+
+        /* An empty multisorter doesn't do any sorting and the sortmodel is
+         * smart enough to know that.
+         */
+        unsorted = new Gtk.MultiSorter ();
+
+        /* rgb_sorter will append different sortings mechanisms and apply them one by one
+         *  i.e apply red sorter then green then blue to produce RGB sorter
+         */
+        rgb_sorter = new Gtk.MultiSorter ();
+
+        /* expression will get the corresponding property on demand for each item */
+        expression = new Gtk.PropertyExpression (typeof (ColorWidget), null, "color_name");
+        name_sorter = new Gtk.StringSorter (expression);
+
+        expression = new Gtk.PropertyExpression (typeof (ColorWidget), null, "red");
+        red_sorter = new Gtk.NumericSorter (expression);
+        rgb_sorter.append (red_sorter);
+
+        expression = new Gtk.PropertyExpression (typeof (ColorWidget), null, "green");
+        green_sorter = new Gtk.NumericSorter (expression);
+        rgb_sorter.append (green_sorter);
+
+        expression = new Gtk.PropertyExpression (typeof (ColorWidget), null, "blue");
+        blue_sorter = new Gtk.NumericSorter (expression);
+        rgb_sorter.append (blue_sorter);
+
+        hsv_sorter = new Gtk.MultiSorter ();
+
+        expression = new Gtk.PropertyExpression (typeof (ColorWidget), null, "hue");
+        hue_sorter = new Gtk.NumericSorter (expression);
+        hsv_sorter.append (hue_sorter);
+
+        expression = new Gtk.PropertyExpression (typeof (ColorWidget), null, "saturation");
+        saturation_sorter = new Gtk.NumericSorter (expression);
+        hsv_sorter.append (saturation_sorter);
+
+        expression = new Gtk.PropertyExpression (typeof (ColorWidget), null, "value");
+        value_sorter = new Gtk.NumericSorter (expression);
+        hsv_sorter.append (value_sorter);
+
+        sort_list_model = new Gtk.SortListModel (color_model, unsorted);
+        sort_list_model.incremental = true;
+        selection_model = new Gtk.MultiSelection (sort_list_model);
 
         grid_view = new Gtk.GridView (selection_model, simple_color_factory);
         grid_view.enable_rubberband = true;
@@ -63,24 +127,34 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
     public void update_sort_by (Gtk4Demo.SortBy sortby) {
         switch (sortby) {
             case SortBy.UNSORTED:
+                sort_list_model.sorter = unsorted;
                 break;
             case SortBy.NAME:
+                sort_list_model.sorter = name_sorter;
                 break;
             case SortBy.RED:
+                sort_list_model.sorter = red_sorter;
                 break;
             case SortBy.GREEN:
+                sort_list_model.sorter = green_sorter;
                 break;
             case SortBy.BLUE:
+                sort_list_model.sorter = blue_sorter;
                 break;
             case SortBy.RGB:
+                sort_list_model.sorter = rgb_sorter;
                 break;
             case SortBy.HUE:
+                sort_list_model.sorter = hue_sorter;
                 break;
             case SortBy.SATURAION:
+                sort_list_model.sorter = saturation_sorter;
                 break;
             case SortBy.VALUE:
+                sort_list_model.sorter = value_sorter;
                 break;
             case SortBy.HSV:
+                sort_list_model.sorter = hsv_sorter;
                 break;
             default:
                 assert_not_reached ();
@@ -127,7 +201,7 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
 
     void bind_detailed_color_factory (Gtk.SignalListItemFactory factory, Gtk.ListItem list_item) {
         var box = (Gtk.Box)list_item.get_child ();
-        var color_item = (ColorWidget)list_item.get_item ();
+        var color_item = (ColorWidget) list_item.get_item ();
 
         var label = (Gtk.Label)box.get_first_child ();
         label.label = color_item.color_name;
