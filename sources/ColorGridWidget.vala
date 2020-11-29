@@ -5,7 +5,6 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
     private Gtk.SelectionModel selection_model;
     private Gtk.SignalListItemFactory simple_color_factory;
     private Gtk.SignalListItemFactory detailed_color_factory;
-    private Gtk.MultiSorter multi_sorter;
 
     static construct {
         set_layout_manager_type (typeof (Gtk.BinLayout));
