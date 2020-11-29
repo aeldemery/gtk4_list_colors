@@ -61,8 +61,31 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
         }
     }
 
-    public void update_sort_by (Gtk4Demo.SortBy param) {
-        
+    public void update_sort_by (Gtk4Demo.SortBy sortby) {
+        switch (sortby) {
+            case SortBy.UNSORTED:
+                break;
+            case SortBy.NAME:
+                break;
+            case SortBy.RED:
+                break;
+            case SortBy.GREEN:
+                break;
+            case SortBy.BLUE:
+                break;
+            case SortBy.RGB:
+                break;
+            case SortBy.HUE:
+                break;
+            case SortBy.SATURAION:
+                break;
+            case SortBy.VALUE:
+                break;
+            case SortBy.HSV:
+                break;
+            default:
+                assert_not_reached ();
+        }
     }
 
     protected override void dispose () {
