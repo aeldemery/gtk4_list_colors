@@ -111,6 +111,8 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
 
         var pic = new Gtk.Picture ();
         var name_label = new Gtk.Label (null);
+        name_label.ellipsize = Pango.EllipsizeMode.END;
+        name_label.max_width_chars = 12;
         var rgb_label = new Gtk.Label (null);
         rgb_label.use_markup = true;
         var hsv_label = new Gtk.Label (null);
