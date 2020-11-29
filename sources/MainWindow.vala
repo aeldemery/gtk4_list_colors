@@ -53,7 +53,6 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
         header.pack_end (details_dropdown);
         header.pack_end (label);
 
-
         this.set_titlebar (header);
 
         color_grid_widget = new ColorGridWidget ();
