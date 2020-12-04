@@ -172,6 +172,21 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
         }
     }
 
+    /**
+     * Get the underlying SelectionModel, to be able to retrieve currently selected items.
+     */
+    public Gtk.SelectionModel get_selection_model () {
+        return selection_model;
+    }
+
+    /**
+     * Get the underlying SortListModel to be able to get the number of
+     * pending items during incremental sorting.
+     */
+    public Gtk.SortListModel get_sort_list_model () {
+        return sort_list_model;
+    }
+
     protected override void dispose () {
         sw.unparent ();
         base.dispose ();
@@ -183,7 +198,7 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
     }
 
     void bind_simple_color_factory (Gtk.SignalListItemFactory factory, Gtk.ListItem list_item) {
-        var color_item = (ColorWidget)list_item.get_item ();
+        var color_item = (ColorWidget) list_item.get_item ();
         var pic = (Gtk.Picture)list_item.get_child ();
         pic.set_paintable (color_item);
     }
@@ -199,7 +214,7 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
 
         var rgb_label = new Gtk.Label (null);
         rgb_label.use_markup = true;
-        
+
         var hsv_label = new Gtk.Label (null);
         hsv_label.use_markup = true;
 

@@ -1,6 +1,8 @@
 public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
     Gtk.HeaderBar header;
     ColorGridWidget color_grid_widget;
+    ColorSelectionWidget selection_widget;
+
     public MainWindow (Gtk.Application app) {
         Object (application: app);
 
@@ -12,6 +14,7 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
 
         var toggle_info = new Gtk.ToggleButton ();
         toggle_info.icon_name = "emblem-important-symbolic";
+        toggle_info.tooltip_text = "Show selection info";
 
         var refill_button = new Gtk.Button.with_label ("refill");
         var label = new Gtk.Label ("Color Num:");
@@ -64,7 +67,19 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
 
         color_grid_widget = new ColorGridWidget ();
         color_grid_widget.hexpand = color_grid_widget.vexpand = true;
-        this.set_child (color_grid_widget);
+
+        var sort_model = color_grid_widget.get_sort_list_model ();
+        var selection_model = color_grid_widget.get_selection_model ();
+
+        selection_widget = new ColorSelectionWidget (sort_model, selection_model);
+        
+        toggle_info.bind_property ("active", selection_widget, "selection-shown");
+
+        var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        box.append (selection_widget);
+        box.append (color_grid_widget);
+
+        this.set_child (box);
     }
 
     void number_dropdown_item_selected (GLib.Object object, GLib.ParamSpec pspec) {
@@ -130,7 +145,7 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
 
     void bind_format_factory (Gtk.SignalListItemFactory factory, Gtk.ListItem list_item) {
         var label = (Gtk.Label)list_item.child;
-        var item = (Gtk.StringObject) list_item.item;
+        var item = (Gtk.StringObject)list_item.item;
 
         var num = int.parse (item.string);
         var str = "%'u".printf (num);
