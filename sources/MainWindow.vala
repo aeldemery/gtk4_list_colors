@@ -31,6 +31,9 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
         {
             "8", "64", "512", "4096", "32768", "262144", "2097152", "16777216",
         });
+        refill_button = new Gtk.Button.with_label ("Refill");
+        refill_button.clicked.connect (refill_button_clicked_cb);
+
 
         var format_factory = new Gtk.SignalListItemFactory ();
         format_factory.setup.connect (setup_format_factory);
