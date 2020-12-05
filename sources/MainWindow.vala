@@ -2,6 +2,9 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
     Gtk.HeaderBar header;
     ColorGridWidget color_grid_widget;
     ColorSelectionWidget selection_widget;
+    Gtk.Button refill_button;
+    Gtk.Label refill_num_label;
+    Gtk.DropDown number_dropdown;
 
     public MainWindow (Gtk.Application app) {
         Object (application: app);
