@@ -160,8 +160,26 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
         var item = (Gtk.StringObject)list_item.item;
 
         var num = int.parse (item.string);
-        var str = "%'u".printf (num);
+        label.label = "%'u".printf (num);
+    }
 
-        label.label = str;
+    void refill_button_clicked_cb (Gtk.Button button) {
+        color_grid_widget.update_list_size (0);
+        button.add_tick_callback (refill_colors);
+    }
+
+    bool refill_colors (Gtk.Widget button, Gdk.FrameClock clock) {
+        var selected_str = (Gtk.StringObject)number_dropdown.selected_item;
+        var num = uint.parse (selected_str.string);
+        var size = color_grid_widget.get_list_size ();
+        var i = uint.min (num, size + uint.max (1, num / 4096));
+        refill_num_label.label = "%'u /".printf (i);
+        color_grid_widget.update_list_size (i);
+
+        if (size >= i) {
+            return GLib.Source.REMOVE;
+        } else {
+            return GLib.Source.CONTINUE;
+        }
     }
 }
