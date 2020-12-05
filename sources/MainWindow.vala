@@ -15,9 +15,14 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
         header = new Gtk.HeaderBar ();
         header.decoration_layout = ":close";
 
+        color_grid_widget = new ColorGridWidget ();
+        color_grid_widget.hexpand = color_grid_widget.vexpand = true;
+
         var toggle_info = new Gtk.ToggleButton ();
         toggle_info.icon_name = "emblem-important-symbolic";
         toggle_info.tooltip_text = "Show selection info";
+
+        var label = new Gtk.Label ("Color Num:");
 
         refill_num_label = new Gtk.Label ("4096 /"); /* default num */
         var attrs = new Pango.AttrList ();
@@ -25,15 +30,10 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
         refill_num_label.xalign = 1;
         refill_num_label.attributes = attrs;
 
-        var refill_button = new Gtk.Button.with_label ("refill");
-        var label = new Gtk.Label ("Color Num:");
-        var number_dropdown = new Gtk.DropDown.from_strings (
+        number_dropdown = new Gtk.DropDown.from_strings (
         {
             "8", "64", "512", "4096", "32768", "262144", "2097152", "16777216",
         });
-        refill_button = new Gtk.Button.with_label ("Refill");
-        refill_button.clicked.connect (refill_button_clicked_cb);
-
 
         var format_factory = new Gtk.SignalListItemFactory ();
         format_factory.setup.connect (setup_format_factory);
@@ -43,10 +43,13 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
         number_dropdown.factory = format_factory;
         number_dropdown.notify["selected"].connect (number_dropdown_item_selected);
 
+        refill_button = new Gtk.Button.with_label ("Refill");
         refill_button.clicked.connect (refill_button_clicked_cb);
+
         header.pack_start (toggle_info);
         header.pack_start (refill_button);
         header.pack_start (label);
+        header.pack_start (refill_num_label);
         header.pack_start (number_dropdown);
 
         label = new Gtk.Label ("Sort By:");
@@ -78,14 +81,11 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
 
         this.set_titlebar (header);
 
-        color_grid_widget = new ColorGridWidget ();
-        color_grid_widget.hexpand = color_grid_widget.vexpand = true;
-
         var sort_model = color_grid_widget.get_sort_list_model ();
         var selection_model = color_grid_widget.get_selection_model ();
 
         selection_widget = new ColorSelectionWidget (sort_model, selection_model);
-        
+
         toggle_info.bind_property ("active", selection_widget, "selection-shown");
 
         var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
