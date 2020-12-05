@@ -43,6 +43,7 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
         number_dropdown.factory = format_factory;
         number_dropdown.notify["selected"].connect (number_dropdown_item_selected);
 
+        refill_button.clicked.connect (refill_button_clicked_cb);
         header.pack_start (toggle_info);
         header.pack_start (refill_button);
         header.pack_start (label);
