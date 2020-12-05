@@ -123,6 +123,11 @@ public class Gtk4Demo.ColorGridWidget : Gtk.Widget {
         color_model.size = new_size;
     }
 
+    /** Get the underlying model size */
+    public uint get_list_size () {
+        return color_model.size;
+    }
+
     /** Update color grid to either show or hide the details  */
     public void update_show_details (bool details = false) {
         if (details == false) {
