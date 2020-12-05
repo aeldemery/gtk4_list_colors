@@ -97,7 +97,9 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
     void number_dropdown_item_selected (GLib.Object object, GLib.ParamSpec pspec) {
         var dropdown = (Gtk.DropDown)object;
         var item = (Gtk.StringObject)dropdown.get_selected_item ();
-        var i = int.parse (item.string);
+        var i = uint.parse (item.string);
+
+        refill_num_label.label = "%'u /".printf (i);
         color_grid_widget.update_list_size (i);
     }
 
