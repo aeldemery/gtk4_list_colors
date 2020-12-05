@@ -19,6 +19,12 @@ public class Gtk4Demo.MainWindow : Gtk.ApplicationWindow {
         toggle_info.icon_name = "emblem-important-symbolic";
         toggle_info.tooltip_text = "Show selection info";
 
+        refill_num_label = new Gtk.Label ("4096 /"); /* default num */
+        var attrs = new Pango.AttrList ();
+        attrs.insert (new Pango.AttrFontFeatures ("tnum"));
+        refill_num_label.xalign = 1;
+        refill_num_label.attributes = attrs;
+
         var refill_button = new Gtk.Button.with_label ("refill");
         var label = new Gtk.Label ("Color Num:");
         var number_dropdown = new Gtk.DropDown.from_strings (
